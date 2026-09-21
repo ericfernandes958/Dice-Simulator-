@@ -4,13 +4,15 @@ import matplotlib.pyplot as plt
 rng = np.random.default_rng()
 numbers = np.array([1, 2, 3, 4, 5, 6])
 
-rolls = rng.choice(numbers, 10000)
+rollNo = 10000
+
+rolls = rng.choice(numbers, rollNo)
 
 # Lists displaying data to be presented
 
 colours = ["red", "blue", "green", "purple", "pink", "orange"]
 frequency = np.bincount(rolls)[1:]
-expected = [1666.67] * 6
+expected = [rollNo / 6] * 6
 
 # Creates a figure with two graphs on one page
 
@@ -32,7 +34,6 @@ ax2.set_title("Expected vs Actual")
 ax2.set_xlabel("Frequency")
 ax2.set_ylabel("Dice face")
 
-ax2.set_xticks(numbers)
 ax2.legend()
 plt.tight_layout()
 
