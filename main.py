@@ -26,7 +26,7 @@ ax1.set_title("Dice Roll Distribution")
 width = 0.5
 
 ax2.barh(numbers - width / 2, expected, height=width, label="Expected")
-ax2.barh(numbers - width / 2, frequency, height=width, label="Actual")
+ax2.barh(numbers + width / 2, frequency, height=width, label="Actual")
 
 ax2.set_title("Expected vs Actual")
 ax2.set_xlabel("Frequency")
@@ -35,5 +35,6 @@ ax2.set_ylabel("Dice face")
 ax2.set_xticks(numbers)
 ax2.legend()
 plt.tight_layout()
+
 
 plt.show()
