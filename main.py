@@ -23,7 +23,7 @@ ax1.set_title("Dice Roll Distribution")
 
 # Grouped bar chart
 
-width = 0.5
+width = 0.4
 
 ax2.barh(numbers - width / 2, expected, height=width, label="Expected")
 ax2.barh(numbers + width / 2, frequency, height=width, label="Actual")
