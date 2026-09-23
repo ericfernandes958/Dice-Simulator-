@@ -1,41 +1,66 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+from matplotlib.widgets import RadioButtons
+
 rng = np.random.default_rng()
-numbers = np.array([1, 2, 3, 4, 5, 6])
 
-rollNo = 10000
+numbers = np.arange(1, 7)
+sample_sizes = [10, 100, 1_000, 10_000, 100_000]
 
-rolls = rng.choice(numbers, rollNo)
+# Generation
 
-# Lists displaying data to be presented
-
+results = {}
 colours = ["red", "blue", "green", "purple", "pink", "orange"]
-frequency = np.bincount(rolls)[1:]
-expected = [rollNo / 6] * 6
 
-# Creates a figure with two graphs on one page
+for size in sample_sizes:
+    rolls = rng.choice(numbers, size)
+    frequency = np.bincount(rolls, minlength=7)[1:]
+    results[size] = frequency
 
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+figure, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
 
-# Pie chart
 
-ax1.pie(frequency, labels=numbers, autopct="%1.1f%%", colors=colours)
-ax1.set_title("Dice Roll Distribution")
+def update_graph(sample_size):
+    frequency = results[sample_size]
+    expected = sample_size / 6
 
-# Grouped bar chart
+    # Clear screen
 
-width = 0.4
+    ax1.clear()
+    ax2.clear()
 
-ax2.barh(numbers - width / 2, expected, height=width, label="Expected")
-ax2.barh(numbers + width / 2, frequency, height=width, label="Actual")
+    # Pie chart
 
-ax2.set_title("Expected vs Actual")
-ax2.set_xlabel("Frequency")
-ax2.set_ylabel("Dice face")
+    ax1.pie(frequency, labels=numbers, autopct="%1.1f%%", colors=colours)
+    ax1.set_title(f"Dice Roll Distribution ({sample_size:,} rolls)")
 
-ax2.legend()
-plt.tight_layout()
+    width = 0.4
 
+    # Bar graph
+
+    ax2.barh(numbers - width / 2, [expected] * 6, height=width, label="Expected")
+
+    ax2.barh(numbers + width / 2, frequency, height=width, label="Actual")
+
+    ax2.set_title(f"Expected vs Actual ({sample_size:,} rolls)")
+    ax2.set_xlabel("Frequency")
+    ax2.set_ylabel("Dice face")
+    ax2.legend()
+
+    figure.canvas.draw_idle()
+
+
+# Radio buttons
+
+radio_ax = figure.add_axes([0.02, 0.3, 0.12, 0.4])
+
+radio = RadioButtons(radio_ax, [str(size) for size in sample_sizes])
+
+radio.on_clicked(lambda label: update_graph(int(label)))
+
+# Initial graph
+
+update_graph(10_000)
 
 plt.show()
