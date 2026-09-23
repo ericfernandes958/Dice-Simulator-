@@ -83,6 +83,6 @@ ax3.grid(True)
 
 # Initial graph
 
-update_graph(10_000)
+update_graph(10)
 
 plt.show()
